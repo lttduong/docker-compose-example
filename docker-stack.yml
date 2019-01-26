@@ -1,0 +1,33 @@
+version: '3'
+services:
+    web:
+      build: apache/
+      ports:
+      - "80:80"
+      restart: always
+
+    redis:
+      image: redis:3.2.10
+      command: 
+            - redis-server
+            - "--slave-read-only"
+            - "yes"
+            - "--port"
+            - "6379"
+            - "--appendonly"
+            - "no"      
+      ports:
+       - "6379:6379"
+
+    mysql:
+      build: mysql/
+      command: mysqld
+      environment:
+        MYSQL_DATABASE: "test"
+        MYSQL_USER: "test"
+        MYSQL_PASSWORD: "test"
+        MYSQL_ROOT_PASSWORD: "root"
+        MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      ports:
+        - "3306:3306"
+
